@@ -118,6 +118,7 @@ npm i fifea-toolkit
 ## Quick start / Início rápido
 
 **EN:** Examples below illustrate the intended usage. Names/paths may change while the API stabilizes.
+
 **PT-BR:** Os exemplos abaixo ilustram o uso pretendido. Nomes/paths podem mudar enquanto a API estabiliza.
 
 ### Read an Rx3 file / Ler um Rx3
