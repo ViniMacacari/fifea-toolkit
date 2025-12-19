@@ -699,6 +699,13 @@ export class FifaUtil {
         return FifaUtil.decoder.decode(r.readBytes(count))
     }
 
+    public static readFloat(r: BinaryReaderLike): number {
+        const buffer = new ArrayBuffer(4)
+        const view = new DataView(buffer)
+        view.setInt32(0, r.readInt32(), true)
+        return view.getFloat32(0, true)
+    }
+
     static readStringFixed(r: BinaryReaderLike, offset: number, length: number): string {
         r.position = offset
         return FifaUtil.decoder.decode(r.readBytes(length))
