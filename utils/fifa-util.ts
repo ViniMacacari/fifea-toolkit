@@ -910,9 +910,19 @@ export class FifaUtil {
         w.position = current
     }
 
-    static writeSectionTotalSize(w: BinaryWriterLike, offsetStart: number): UInt32 {
-        const totalSize = (w.position - offsetStart) >>> 0
-        FifaUtil.writeValue(w, totalSize, offsetStart)
+    static writeSectionTotalSize(w: BinaryWriterLike, offsetStart: number): number
+    static writeSectionTotalSize(w: BinaryWriterLike, offsetStart: number, offsetEnd: number, swapEndian: any): number
+    static writeSectionTotalSize(
+        w: BinaryWriterLike,
+        offsetStart: number,
+        offsetEnd?: number,
+        swapEndian?: any
+    ): number {
+        const end = (offsetEnd !== undefined) ? offsetEnd : w.position
+        const totalSize = (end - offsetStart) >>> 0
+
+        FifaUtil.writeValue(w, totalSize as any, offsetStart)
+
         return totalSize
     }
 
