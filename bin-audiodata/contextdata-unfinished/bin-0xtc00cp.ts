@@ -1,5 +1,5 @@
 import { BinaryReaderLike } from "../../utils/fifa-util"
-import { Bin_0TVE00CP_Parameter } from "../bin-0tve00cp-parameter"
+import { AudioBin } from "../event-system/bin-0tve00cp-event"
 import { Bin_0XTC00CP_Id } from "./bin-0xtc00cp-ld"
 
 export class Bin_0XTC00CP {
@@ -15,7 +15,7 @@ export class Bin_0XTC00CP {
     OffsetsParameters: number[] = []
 
     Ids: Bin_0XTC00CP_Id[] = []
-    Parameters: Bin_0TVE00CP_Parameter[] = []
+    Parameters: AudioBin.EventSystem.Parameter[] = []
 
     constructor()
     constructor(r: BinaryReaderLike)
@@ -58,7 +58,7 @@ export class Bin_0XTC00CP {
         this.Parameters = new Array(this.Num_1)
         for (let i = 0; i < this.Parameters.length; i++) {
             r.position = this.OffsetsParameters[i]
-            this.Parameters[i] = new Bin_0TVE00CP_Parameter(r)
+            this.Parameters[i] = new AudioBin.EventSystem.Parameter(r)
         }
 
         return true
@@ -79,7 +79,7 @@ export class Bin_0XTC00CP {
 
         for (let i = 0; i < this.Num_1; i++) {
             switch (this.Parameters[i].Type) {
-                case Bin_0TVE00CP_Parameter.BinParameterType.EnumBit:
+                case AudioBin.EventSystem.BinParameterType.EnumBit:
                     StrXml += vbNewLine + '      <enum name="' + this.Parameters[i].Name + '" id="' + String(this.Parameters[i].Id) + '" type="EnumBit" numValues="' + String(this.Parameters[i].NumValues) + '">'
                     for (let j = 0; j < this.Parameters[i].NumValues; j++) {
                         StrXml += vbNewLine + '        <enumerator name="' + this.Parameters[i].ParameterValues[j].Name + '" value="' + String(this.Parameters[i].ParameterValues[j].Value) + '" />'
@@ -87,7 +87,7 @@ export class Bin_0XTC00CP {
                     StrXml += vbNewLine + '      </enum>'
                     break
 
-                case Bin_0TVE00CP_Parameter.BinParameterType.Int:
+                case AudioBin.EventSystem.BinParameterType.Int:
                     StrXml += vbNewLine + '      <parameter name="' + this.Parameters[i].Name + '" id="' + String(this.Parameters[i].Id) + '" type="Int" />'
                     break
             }
