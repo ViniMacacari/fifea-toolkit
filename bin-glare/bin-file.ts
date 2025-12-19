@@ -1,4 +1,4 @@
-import { BinaryReaderLike, FifaUtil } from '../../utils/fifa-util'
+import { BinaryReaderLike, FifaUtil } from '../utils/fifa-util'
 
 export namespace GlareBin {
 
