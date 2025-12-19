@@ -10,6 +10,9 @@ export interface BinaryReaderLike {
     readByte(): number
     readBytes(length: number): Uint8Array
     readInt16(): number
+    readUInt16(): number
+    readInt32(): number
+    readUInt32(): number
 }
 
 export interface BinaryWriterLike {
@@ -53,6 +56,28 @@ export class BufferReader implements BinaryReaderLike {
         const b1 = this.readByte()
         const v = (b0 | (b1 << 8)) & 0xffff
         return v & 0x8000 ? v - 0x10000 : v
+    }
+
+    readUInt16(): number {
+        const b0 = this.readByte()
+        const b1 = this.readByte()
+        return (b0 | (b1 << 8)) >>> 0
+    }
+
+    readInt32(): number {
+        const b0 = this.readByte()
+        const b1 = this.readByte()
+        const b2 = this.readByte()
+        const b3 = this.readByte()
+        return (b0 | (b1 << 8) | (b2 << 16) | (b3 << 24)) | 0
+    }
+
+    readUInt32(): number {
+        const b0 = this.readByte()
+        const b1 = this.readByte()
+        const b2 = this.readByte()
+        const b3 = this.readByte()
+        return ((b0 | (b1 << 8) | (b2 << 16) | (b3 << 24)) >>> 0)
     }
 }
 
