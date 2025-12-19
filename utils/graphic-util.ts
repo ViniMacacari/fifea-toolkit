@@ -1805,28 +1805,36 @@ export class GraphicUtil {
         switch (m_TextureFormat) {
             case ETextureFormat.BC1:
             case ETextureFormat.BC4:
-                if (m_width < 4) m_width = 4
+                if (m_width < 4) {
+                    m_width = 4
+                }
                 m_Pitch = Math.max(1, Math.floor((m_width + 3) / 4)) * 8
                 break
 
             case ETextureFormat.BC2:
             case ETextureFormat.BC3:
             case ETextureFormat.BC5:
-                if (m_width < 4) m_width = 4
+                if (m_width < 4) {
+                    m_width = 4
+                }
                 m_Pitch = Math.max(1, Math.floor((m_width + 3) / 4)) * 16
                 break
 
             case ETextureFormat.B8G8R8A8:
             case ETextureFormat.R8G8B8A8:
-                if (m_width < 1) m_width = 1
+                if (m_width < 1) {
+                    m_width = 1
+                }
                 {
                     const bitsperpixel: number = 32
                     m_Pitch = Math.floor((m_width * bitsperpixel + 7) / 8)
                 }
                 break
 
-            case ETextureFormat.B8G8R8:
-                if (m_width < 1) m_width = 1
+            case ETextureFormat.B8G8R8: // no samples found, experimental (pitch from microsoft docs)
+                if (m_width < 1) {
+                    m_width = 1
+                }
                 {
                     const bitsperpixel: number = 24
                     m_Pitch = Math.floor((m_width * bitsperpixel + 7) / 8)
@@ -1834,7 +1842,9 @@ export class GraphicUtil {
                 break
 
             case ETextureFormat.L8:
-                if (m_width < 1) m_width = 1
+                if (m_width < 1) {
+                    m_width = 1
+                }
                 {
                     const bitsperpixel: number = 8
                     m_Pitch = Math.floor((m_width * bitsperpixel + 7) / 8)
@@ -1842,7 +1852,9 @@ export class GraphicUtil {
                 break
 
             case ETextureFormat.L8A8:
-                if (m_width < 1) m_width = 1
+                if (m_width < 1) {
+                    m_width = 1
+                }
                 {
                     const bitsperpixel: number = 16
                     m_Pitch = Math.floor((m_width * bitsperpixel + 7) / 8)
@@ -1851,8 +1863,10 @@ export class GraphicUtil {
 
             case ETextureFormat.B5G6R5:
             case ETextureFormat.B4G4R4A4:
-            case ETextureFormat.B5G5R5A1:
-                if (m_width < 1) m_width = 1
+            case ETextureFormat.B5G5R5A1: // no samples found, experimental
+                if (m_width < 1) {
+                    m_width = 1
+                }
                 {
                     const bitsperpixel: number = 16
                     m_Pitch = Math.floor((m_width * bitsperpixel + 7) / 8)
@@ -1860,7 +1874,9 @@ export class GraphicUtil {
                 break
 
             case ETextureFormat.R32G32B32A32Float:
-                if (m_width < 1) m_width = 1
+                if (m_width < 1) {
+                    m_width = 1
+                }
                 {
                     const bitsperpixel: number = 128
                     m_Pitch = Math.floor((m_width * bitsperpixel + 7) / 8)
@@ -1868,12 +1884,16 @@ export class GraphicUtil {
                 break
 
             case ETextureFormat.BC6H_UF16:
-                if (m_width < 4) m_width = 4
+                if (m_width < 4) {
+                    m_width = 4
+                }
                 m_Pitch = Math.max(1, Math.floor((m_width + 3) / 4)) * 16
                 break
 
             case ETextureFormat.BC7:
-                if (m_width < 4) m_width = 4
+                if (m_width < 4) {
+                    m_width = 4
+                }
                 m_Pitch = Math.max(1, Math.floor((m_width + 3) / 4)) * 16
                 break
 
@@ -1882,7 +1902,7 @@ export class GraphicUtil {
                 break
         }
 
-        return m_Pitch
+        return m_Pitch as any
     }
 
     public static CalcNumMips(Width: number, Height: number): number {
