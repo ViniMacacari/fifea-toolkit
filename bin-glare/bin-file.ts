@@ -1,5 +1,5 @@
 import * as fs from 'fs'
-import { BinaryReaderLike, FifaUtil } from '../utils/fifa-util'
+import { BinaryReaderLike, BufferReader, FifaUtil } from '../utils/fifa-util'
 
 export namespace GlareBin {
 
@@ -99,10 +99,10 @@ export namespace GlareBin {
 
         private loadFromFile(fileName: string): boolean {
             const buffer = fs.readFileSync(fileName)
-            const r = new BinaryReaderLike(buffer)
+
+            const r = new BufferReader(buffer)
 
             const flag = this.loadFromReader(r)
-
             return flag
         }
 
@@ -121,7 +121,7 @@ export namespace GlareBin {
         private loadFromReader(r: BinaryReaderLike): boolean {
             this.version = r.readInt32()
             this.id = r.readInt32()
-            this.texture = FifaUtil.readString(r, 64)
+            this.texture = FifaUtil.read64SizedString(r)
             this.startSize = FifaUtil.readFloat(r)
             this.endSize = FifaUtil.readFloat(r)
             this.quantity = r.readInt32()
