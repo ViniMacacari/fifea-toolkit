@@ -1,4 +1,9 @@
-import { BufferReader, FifaUtil, type BinaryReaderLike } from '../utils/fifa-util'
+import {
+    BufferReader,
+    FifaUtil,
+    type BinaryReaderLike,
+    type BinaryWriterLike
+} from './fifa-util'
 
 export enum ETextureFormat {
     BC1,
@@ -227,6 +232,54 @@ export class RawImage {
             default:
                 return
         }
+    }
+
+    public Save(SwapEndian_DxtBlock: boolean, w: FileWriterLike): boolean {
+        const reverseRange = (arr: Uint8Array, start: number, count: number) => {
+            if (start < 0 || count < 0 || start + count > arr.length) {
+                throw new RangeError(`Array.Reverse out of range (start=${start}, count=${count}, len=${arr.length})`)
+            }
+            for (let i = 0, j = count - 1; i < j; i++, j--) {
+                const a = start + i
+                const b = start + j
+                const tmp = arr[a]
+                arr[a] = arr[b]
+                arr[b] = tmp
+            }
+        }
+
+        const swapBlocks = (swapNumBytes: number) => {
+            for (let x = 0; x <= this.m_RawData.length - 1; x += swapNumBytes) {
+                reverseRange(this.m_RawData, x, swapNumBytes)
+            }
+        }
+
+        if (this.NeedToSaveRawData) {
+            this.m_RawData = new Uint8Array(this.m_Size)
+
+            this.CreateRawData() // sempre little-endian
+
+            if (SwapEndian_DxtBlock) {
+                const swapNumBytes = this.GetSwapNumBytes(this.m_TextureFormat)
+                swapBlocks(swapNumBytes)
+            }
+
+            this.NeedToSaveRawData = false
+        } else {
+            if (this.m_SwapEndian_DxtBlock !== SwapEndian_DxtBlock) {
+                const swapNumBytes = this.GetSwapNumBytes(this.m_TextureFormat)
+                swapBlocks(swapNumBytes)
+            }
+        }
+
+        this.m_SwapEndian_DxtBlock = SwapEndian_DxtBlock
+
+        if (w.writeBytes) w.writeBytes(this.m_RawData)
+        else if (w.Write) w.Write(this.m_RawData)
+        else if (w.write) w.write(this.m_RawData)
+        else throw new Error('FileWriterLike não tem writeBytes/Write/write')
+
+        return true
     }
 
     public Load(r: BinaryReaderLike): boolean {
