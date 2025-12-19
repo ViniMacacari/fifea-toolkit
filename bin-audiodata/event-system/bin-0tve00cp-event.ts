@@ -5,12 +5,6 @@ export namespace AudioBin {
     export namespace EventSystem {
         export namespace AudioBin {
             export namespace EventSystem {
-                export interface BinaryReaderLike {
-                    baseStream: { position: number }
-                    readUInt16(): number
-                    readInt32(): number
-                }
-
                 export interface EventLike {
                     Name: string
                     InterfaceCrc: number
@@ -52,7 +46,7 @@ export namespace AudioBin {
                     }
 
                     private load(r: BinaryReaderLike): void {
-                        r.baseStream.position = 8
+                        r.position = 8
 
                         r.readUInt16()
                         r.readUInt16()
@@ -66,13 +60,13 @@ export namespace AudioBin {
                         this.OffsetOffsetsEvents = r.readInt32()
                         this.OffsetOffsetsParameters = r.readInt32()
 
-                        r.baseStream.position = this.OffsetOffsetsEvents
+                        r.position = this.OffsetOffsetsEvents
                         this.OffsetsEvents = new Array(this.NumEvents)
                         for (let i = 0; i < this.OffsetsEvents.length; i++) {
                             this.OffsetsEvents[i] = r.readInt32()
                         }
 
-                        r.baseStream.position = this.OffsetOffsetsParameters
+                        r.position = this.OffsetOffsetsParameters
                         this.OffsetsParameters = new Array(this.NumParameters)
                         for (let i = 0; i < this.OffsetsParameters.length; i++) {
                             this.OffsetsParameters[i] = r.readInt32()
@@ -80,13 +74,13 @@ export namespace AudioBin {
 
                         this.Events = new Array(this.NumEvents)
                         for (let i = 0; i < this.Events.length; i++) {
-                            r.baseStream.position = this.OffsetsEvents[i]
+                            r.position = this.OffsetsEvents[i]
                             this.Events[i] = new (Event as any)(r)
                         }
 
                         this.Parameters = new Array(this.NumParameters)
                         for (let i = 0; i < this.Parameters.length; i++) {
-                            r.baseStream.position = this.OffsetsParameters[i]
+                            r.position = this.OffsetsParameters[i]
                             this.Parameters[i] = new (Parameter as any)(r)
                         }
                     }
