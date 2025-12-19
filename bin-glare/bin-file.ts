@@ -1,3 +1,4 @@
+import * as fs from 'fs'
 import { BinaryReaderLike, FifaUtil } from '../utils/fifa-util'
 
 export namespace GlareBin {
@@ -97,16 +98,12 @@ export namespace GlareBin {
         }
 
         private loadFromFile(fileName: string): boolean {
-            try {
-                // Mock implementation for FileStream/FileReader creation
-                // In a real Node environment you would create a buffer here
-                // const buffer = fs.readFileSync(fileName)
-                // const reader = ... create reader from buffer ...
-                // return this.load(reader)
-                return false
-            } catch (e) {
-                return false
-            }
+            const buffer = fs.readFileSync(fileName)
+            const r = new BinaryReaderLike(buffer)
+
+            const flag = this.loadFromReader(r)
+
+            return flag
         }
 
         private loadFromFifaFile(fifaFile: FifaFile): boolean {
@@ -114,9 +111,6 @@ export namespace GlareBin {
                 fifaFile.decompress()
             }
             const r = fifaFile.getReader()
-
-            // Assume Endian.Big is handled by the reader implementation or configuration
-            // r.endianness = Endian.Big 
 
             const flag = this.loadFromReader(r)
             fifaFile.releaseReader(r)
